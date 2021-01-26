@@ -63,7 +63,7 @@ function addMeal(mealData, random = false) {
         </div>
         <div class="meal-body">
             <h4>${mealData.strMeal}</h4>
-            <button class="fav-btn">
+            <button class="fav-btn" id="${mealData.idMeal}">
                 <i class="fas fa-heart"></i>
             </button>
         </div>
@@ -119,6 +119,15 @@ async function fetchFavMeals() {
 
     const mealIds = getMealsLS();
 
+    if(mealIds.length > 0)
+    {
+        const favText = document.getElementById("noFav");
+        favText.hidden = true;
+    }
+    else{
+        const favText = document.getElementById("noFav");
+        favText.hidden = false;
+    }
     for (let i = 0; i < mealIds.length; i++) {
         const mealId = mealIds[i];
         meal = await getMealById(mealId);
@@ -142,11 +151,16 @@ function addMealFav(mealData) {
 
     btn.addEventListener("click", () => {
         removeMealLS(mealData.idMeal);
-
+        const favBtn = document.getElementById(mealData.idMeal);
+        if(favBtn != null)
+        {
+        favBtn.classList.remove("active");
+        }
         fetchFavMeals();
     });
 
-    favMeal.addEventListener("click", () => {
+    var r1 = favMeal.querySelector("img");
+    r1.addEventListener("click", () => {
         showMealInfo(mealData);
     });
 
